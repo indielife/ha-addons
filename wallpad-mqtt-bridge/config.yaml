@@ -1,0 +1,152 @@
+# ==============================================================================
+# Kocom Wallpad HA Add-on 설정 파일
+# ==============================================================================
+
+# 애드온 메타데이터
+name: "Wallpad MQTT Bridge"
+version: "0.1.0"
+slug: wallpad_mqtt_bridge
+description: "RS485 wallpad and ventilator MQTT gateway for Home Assistant"
+url: "https://github.com/indielife/wallpad-mqtt-bridge"
+
+# 지원 아키텍처
+arch:
+  - armhf
+  - armv7
+  - aarch64
+  - amd64
+  - i386
+
+# 시작 유형 및 부팅 설정
+startup: application
+boot: auto
+
+# 시리얼(UART) 디바이스 접근 허용
+uart: true
+
+# 공유 폴더 매핑 (읽기/쓰기)
+map:
+  - "share:rw"
+
+# ==============================================================================
+# 사용자 설정 기본값 (options)
+# HA UI에서 사용자가 변경할 수 있는 설정의 기본값입니다.
+# UI 표시 텍스트는 translations/{lang}.yaml 에서 정의합니다.
+# ==============================================================================
+options:
+  mqtt_broker:
+    host: core-mosquitto
+    username: ""
+    password: ""
+
+  wallpad:
+    enable: true
+    manufacturer: kocom
+    connection_type: Socket
+    socket:
+      host: ""
+      port: 8899
+    serial:
+      port: "/dev/ttyUSB0"
+    enabled_devices:
+      fan: false
+      gas: false
+      elevator: false
+    # 방 설정: 방별 조명/콘센트 패킷 번호(room_no), 기기 개수, 난방 패킷 번호(thermo_no)를 통합 관리.
+    # room_no: 조명/콘센트 패킷 인덱스 (0부터 시작). 생략 시 조명/콘센트 없음.
+    # thermo_no: 난방 패킷 인덱스 (조명과 다를 수 있음). 생략 시 난방 없음.
+    rooms:
+      - name: livingroom
+        room_no: 0
+        light_count: 3
+        plug_count: 2
+        thermo_no: 0
+      - name: bedroom
+        room_no: 1
+        light_count: 2
+        plug_count: 2
+        thermo_no: 1
+      - name: room1
+        room_no: 3
+        light_count: 2
+        plug_count: 2
+        thermo_no: 2
+      - name: room2
+        room_no: 2
+        light_count: 2
+        plug_count: 2
+        thermo_no: 3
+      - name: kitchen
+        room_no: 4
+        light_count: 3
+        plug_count: 2
+
+  advanced:
+    init_temp: 22
+    scan_interval: 300
+    packet_delay: 0.8
+    default_speed: low
+    loglevel: info
+
+  # 환기장치(전열교환기) 설정
+  ventilator:
+    enable: false
+    manufacturer: none
+    connection_type: Serial
+    socket:
+      host: ""
+      port: 8899
+    serial:
+      controller_port: "/dev/ttyUSB1"
+      ventilator_port: "/dev/ttyUSB2"
+    default_speed: low
+
+# ==============================================================================
+# 설정 스키마 (schema)
+# HA UI에서 입력값 유효성 검증에 사용됩니다.
+# '?' 접미사는 선택 입력 필드를 의미합니다.
+# ==============================================================================
+schema:
+  mqtt_broker:
+    host: str
+    username: str
+    password: password
+
+  wallpad:
+    enable: bool
+    manufacturer: str
+    connection_type: "list(Socket|Serial)"
+    socket:
+      host: str?
+      port: int?
+    serial:
+      port: str?
+    enabled_devices:
+      fan: bool
+      gas: bool
+      elevator: bool
+    rooms:
+      - name: str
+        room_no: int?
+        light_count: int?
+        plug_count: int?
+        thermo_no: int?
+
+  advanced:
+    init_temp: "int(10,30)"
+    scan_interval: "int(100,1000)"
+    packet_delay: float
+    default_speed: str
+    loglevel: str
+
+  ventilator:
+    enable: bool
+    manufacturer: str
+    connection_type: "list(Socket|Serial)"
+    socket:
+      host: str?
+      port: int?
+    serial:
+      controller_port: str?
+      ventilator_port: str?
+    default_speed: str
