@@ -7,11 +7,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /
 
 WORKDIR /app
 
-# Build arguments
-ARG BUILD_VERSION=main
+# HA가 config.yaml의 version을 전달하며, 직접 빌드할 때도 같은 버전을 사용합니다.
+ARG BUILD_VERSION=0.1.0
 
-# Clone wallpad-mqtt-bridge
-RUN git clone --depth 1 --branch ${BUILD_VERSION} https://github.com/indielife/wallpad-mqtt-bridge.git . \
+# 버전에 대응하는 소스 태그로 고정합니다.
+RUN git clone --depth 1 --branch "v${BUILD_VERSION}" https://github.com/indielife/wallpad-mqtt-bridge.git . \
     && pip install --no-cache-dir .
 
 # Addon config
