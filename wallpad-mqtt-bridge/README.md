@@ -1,5 +1,15 @@
 # Wallpad MQTT Bridge — Home Assistant Add-on
 
+RS485 월패드와 환기장치를 MQTT로 연결하는 Home Assistant 애드온입니다.
+[Indielife 애드온 저장소](../README.md)에서 제공하는 애드온 중 하나입니다.
+
+## 설치
+
+1. [저장소 등록 안내](../README.md#저장소-등록)에 따라 애드온 저장소를 추가합니다.
+2. 애드온 스토어에서 **Wallpad MQTT Bridge**를 선택하여 설치합니다.
+3. 아래 설정 가이드에 따라 MQTT 브로커와 월패드 연결 정보를 설정한 뒤 시작합니다.
+4. 로그에서 기동과 MQTT 연결을 확인하고, Home Assistant의 기기 등록을 확인합니다.
+
 ## 지원 제조사 (Supported Manufacturers)
 
 현재 이 애드온이 지원하는 월패드 제조사는 다음과 같습니다.
@@ -71,27 +81,54 @@ rooms:
 ```
 
 ### 5. Ventilator
+
 전열교환기(환기장치) 연동 설정입니다.
+
+현재 버전(`v0.1.0`)에서 환기장치는 **Serial 연결만 지원**합니다.
+월패드의 Socket 연결 지원과 별개이며, 환기장치를 활성화한 상태에서
+`connection_type: Socket`으로 설정하면 설정 검증 오류로 애드온이 시작되지 않습니다.
+
 - **Manufacturer**: 전열교환기 제조사 선택 (`None`, `Grex` 중 선택. 기본값: `None`)
-- **Connection Type**: 전열교환기 연결 방식 선택 (`Serial` 또는 `Socket`)
-  - `Serial`: 전열교환기 통신선이 USB 시리얼 젠더를 통해 홈어시스턴트 서버에 직접 연결되어 있는 경우 사용합니다. (벽면 조절기용, 환기장치 본체용 총 2개의 시리얼 포트가 필요합니다.)
-  - `Socket`: 전열교환기 통신선이 EW11 등 시리얼-네트워크 변환기에 연결되어 네트워크를 통해 통신하는 경우 사용합니다.
-- **Serial**: `Connection Type`을 `Serial`로 설정한 경우 활성화되는 시리얼 포트 설정입니다.
-  - **Controller Port**: 전열교환기 벽면 조절기 라인에 연결된 USB 시리얼 디바이스 경로를 입력합니다. (예: `/dev/ttyUSB1`)
-  - **Ventilator Port**: 전열교환기 본체 라인에 연결된 USB 시리얼 디바이스 경로를 입력합니다. (예: `/dev/ttyUSB2`)
-- **Socket**: `Connection Type`을 `Socket`으로 설정한 경우 활성화되는 네트워크 연결 설정입니다.
-  - **Host**: 시리얼-네트워크 변환기(예: Elfin EW11)의 IP 주소를 입력합니다. (예: `192.168.0.12`)
-  - **Port**: 변환기에 설정한 소켓 포트 번호를 입력합니다. (기본값: `8899`)
+- **Connection Type**: `Serial`로 설정합니다.
+- **Serial**: USB 시리얼 젠더로 연결된 벽면 조절기와 환기장치 본체의 포트를 지정합니다.
+  - **Controller Port**: 전열교환기 벽면 조절기 라인의 디바이스 경로 (예: `/dev/ttyUSB1`)
+  - **Ventilator Port**: 전열교환기 본체 라인의 디바이스 경로 (예: `/dev/ttyUSB2`)
 - **Default Speed**: 기본 환기 속도 선택 (`low`, `medium`, `high` 등. 기본값: `low`)
+
+## 소스 버전과 빌드
+
+이 애드온의 `config.yaml` 버전 `0.1.0`은
+[소스 저장소](https://github.com/indielife/wallpad-mqtt-bridge)의 `v0.1.0` 태그에 대응합니다.
+Home Assistant가 전달하는 `BUILD_VERSION` 앞에 `v`를 붙여 해당 태그를 가져옵니다.
+GitHub 릴리즈 발행 없이도 소스 태그가 있으면 빌드할 수 있습니다.
+
+`ha-addons` 저장소 루트에서 HA와 같은 버전 인수로 빌드를 검증합니다.
+
+```bash
+docker build --build-arg BUILD_VERSION=0.1.0 \
+  -t wallpad-mqtt-bridge-addon:0.1.0 ./wallpad-mqtt-bridge
+```
+
+빌드 인수를 생략하면 Dockerfile의 기본 버전 `0.1.0`을 사용합니다.
+새 버전 배포 시 소스 저장소에 `v<버전>` 태그를 먼저 생성하고,
+이 애드온의 `config.yaml`과 Dockerfile 기본 버전을 함께 갱신합니다.
+이미 배포한 소스 태그는 다른 커밋으로 이동하지 않습니다.
+
+로컬 이미지 빌드는 HA의 저장소 등록·설치·정상 기동 검증과 별도로 확인해야 합니다.
 
 ## 문서 (Documentation)
 
-프로젝트에 대한 상세한 가이드는 다음 문서들을 참고하세요.
+애드온이 사용하는 소스 버전 `v0.1.0`의 상세 가이드입니다.
 
-- [시스템 아키텍처 가이드](docs/architecture.md): MQTT-RS485 브릿지의 핵심 컴포넌트와 패킷 흐름을 다룹니다.
-- [하드웨어 연결 가이드](docs/hardware_connection.md): RS485 통신 방식(소켓/시리얼) 및 기기별 결선 아키텍처(버스/프록시)를 설명합니다.
-- [로컬 개발 가이드](docs/development.md): `uv`를 사용한 로컬 가상환경 구성, 패키지 관리, 포매팅/린트 설정 및 도커 빌드 검증 방법을 설명합니다.
-- [코콤 패킷 분석 가이드](docs/packet_analysis.md): 코콤 월패드 통신 패킷 구조 및 각 디바이스별 Hex 코드 정의를 설명합니다.
+- [시스템 아키텍처 가이드][arch]: MQTT-RS485 브릿지의 핵심 컴포넌트와 패킷 흐름
+- [하드웨어 연결 가이드][hardware]: RS485 연결 방식 및 기기별 결선 아키텍처
+- [로컬 개발 가이드][development]: 가상환경 구성, 패키지 관리, 포매팅·린트 및 Docker 빌드
+- [코콤 패킷 분석 가이드][protocol]: 코콤 월패드 통신 패킷 구조 및 기기별 Hex 코드 정의
+
+[arch]: https://github.com/indielife/wallpad-mqtt-bridge/blob/v0.1.0/docs/architecture.md
+[hardware]: https://github.com/indielife/wallpad-mqtt-bridge/blob/v0.1.0/docs/hardware_connection.md
+[development]: https://github.com/indielife/wallpad-mqtt-bridge/blob/v0.1.0/docs/development.md
+[protocol]: https://github.com/indielife/wallpad-mqtt-bridge/blob/v0.1.0/docs/packet_analysis.md
 
 ## Credits & Acknowledgements
 
