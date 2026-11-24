@@ -14,7 +14,9 @@ RS485 월패드와 환기장치를 MQTT로 연결하는 Home Assistant 애드온
 
 현재 애드온 버전 `0.1.0`의 기능·제약·검증 근거는 [GitHub 릴리즈][release]에서 확인합니다.
 HA에서 표시할 버전별 요약은 [변경 내역](CHANGELOG.md)으로 제공합니다.
-`v0.1.0`은 난방 장애 대응 전 기준 버전이며, PR #185의 난방 진단 보강은 포함하지 않습니다.
+
+난방 조절기에 CC 오류가 표시되고 벽 조절기·월패드에서도 제어할 수 없는 현상이
+보고되었습니다. [원인은 조사 중][heating]입니다.
 
 ## 지원 제조사 (Supported Manufacturers)
 
@@ -140,6 +142,7 @@ docker build --build-arg BUILD_VERSION=0.1.0 \
 [development]: https://github.com/indielife/wallpad-mqtt-bridge/blob/v0.1.0/docs/development.md
 [protocol]: https://github.com/indielife/wallpad-mqtt-bridge/blob/v0.1.0/docs/packet_analysis.md
 [release]: https://github.com/indielife/wallpad-mqtt-bridge/releases/tag/v0.1.0
+[heating]: https://github.com/indielife/wallpad-mqtt-bridge/issues/184
 [release-process]: https://github.com/indielife/wallpad-mqtt-bridge/blob/main/docs/release.md
 
 ## Credits & Acknowledgements
