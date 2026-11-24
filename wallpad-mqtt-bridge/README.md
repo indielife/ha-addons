@@ -10,6 +10,12 @@ RS485 월패드와 환기장치를 MQTT로 연결하는 Home Assistant 애드온
 3. 아래 설정 가이드에 따라 MQTT 브로커와 월패드 연결 정보를 설정한 뒤 시작합니다.
 4. 로그에서 기동과 MQTT 연결을 확인하고, Home Assistant의 기기 등록을 확인합니다.
 
+## 릴리즈와 변경 내역
+
+현재 애드온 버전 `0.1.0`의 기능·제약·검증 근거는 [GitHub 릴리즈][release]에서 확인합니다.
+HA에서 표시할 버전별 요약은 [변경 내역](CHANGELOG.md)으로 제공합니다.
+`v0.1.0`은 난방 장애 대응 전 기준 버전이며, PR #185의 난방 진단 보강은 포함하지 않습니다.
+
 ## 지원 제조사 (Supported Manufacturers)
 
 현재 이 애드온이 지원하는 월패드 제조사는 다음과 같습니다.
@@ -110,8 +116,12 @@ docker build --build-arg BUILD_VERSION=0.1.0 \
 ```
 
 빌드 인수를 생략하면 Dockerfile의 기본 버전 `0.1.0`을 사용합니다.
-새 버전 배포 시 소스 저장소에 `v<버전>` 태그를 먼저 생성하고,
-이 애드온의 `config.yaml`과 Dockerfile 기본 버전을 함께 갱신합니다.
+새 버전은 [릴리즈 절차][release-process]에 따라 릴리즈 노트를 먼저 작성·검토하고,
+최종 검증 후 소스 저장소에 `v<버전>` 태그와 GitHub 릴리즈를 발행합니다.
+이후 이 애드온의 `config.yaml`과 Dockerfile 기본 버전,
+태그 기준 문서 링크·`CHANGELOG.md`·릴리즈 링크를 함께 갱신합니다.
+애드온 저장소 `main`에 반영한 뒤 HA 저장소를 새로고침하여 버전과 변경 내역을 확인하고,
+애드온 변경이 있으면 업데이트·정상 기동을 확인합니다.
 이미 배포한 소스 태그는 다른 커밋으로 이동하지 않습니다.
 
 로컬 이미지 빌드는 HA의 저장소 등록·설치·정상 기동 검증과 별도로 확인해야 합니다.
@@ -129,6 +139,8 @@ docker build --build-arg BUILD_VERSION=0.1.0 \
 [hardware]: https://github.com/indielife/wallpad-mqtt-bridge/blob/v0.1.0/docs/hardware_connection.md
 [development]: https://github.com/indielife/wallpad-mqtt-bridge/blob/v0.1.0/docs/development.md
 [protocol]: https://github.com/indielife/wallpad-mqtt-bridge/blob/v0.1.0/docs/packet_analysis.md
+[release]: https://github.com/indielife/wallpad-mqtt-bridge/releases/tag/v0.1.0
+[release-process]: https://github.com/indielife/wallpad-mqtt-bridge/blob/main/docs/release.md
 
 ## Credits & Acknowledgements
 
