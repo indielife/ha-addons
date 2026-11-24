@@ -1,18 +1,18 @@
 # Wallpad MQTT Bridge — Home Assistant Add-on
 
 RS485 월패드와 환기장치를 MQTT로 연결하는 Home Assistant 애드온입니다.
-[Indielife 애드온 저장소](../README.md)에서 제공하는 애드온 중 하나입니다.
+[Indielife 애드온 저장소][repository]에서 제공하는 애드온 중 하나입니다.
 
 ## 설치
 
-1. [저장소 등록 안내](../README.md#저장소-등록)에 따라 애드온 저장소를 추가합니다.
+1. [저장소 등록 안내][registration]에 따라 애드온 저장소를 추가합니다.
 2. 애드온 스토어에서 **Wallpad MQTT Bridge**를 선택하여 설치합니다.
 3. 아래 설정 가이드에 따라 MQTT 브로커와 월패드 연결 정보를 설정한 뒤 시작합니다.
 4. 로그에서 기동과 MQTT 연결을 확인하고, Home Assistant의 기기 등록을 확인합니다.
 
 ## 릴리즈와 변경 내역
 
-버전별 기능·제약·검증 결과는 [릴리스 노트][release], 변경 요약은 [CHANGELOG](CHANGELOG.md)를 참고하세요.
+버전별 기능·제약·검증 결과는 [릴리스 노트][release], 변경 요약은 [CHANGELOG][changelog]를 참고하세요.
 
 난방 조절기의 CC 표시와 벽 조절기·월패드 제어 불능 현상이 보고됐으며, [원인을 조사 중][heating]입니다.
 
@@ -142,6 +142,9 @@ docker build --build-arg BUILD_VERSION=0.1.0 \
 [release]: https://github.com/indielife/wallpad-mqtt-bridge/releases/tag/v0.1.0
 [heating]: https://github.com/indielife/wallpad-mqtt-bridge/issues/184
 [release-process]: https://github.com/indielife/wallpad-mqtt-bridge/blob/main/docs/release.md
+[repository]: https://github.com/indielife/ha-addons/blob/main/README.md
+[registration]: https://github.com/indielife/ha-addons/blob/main/README.md#저장소-등록
+[changelog]: https://github.com/indielife/ha-addons/blob/main/wallpad-mqtt-bridge/CHANGELOG.md
 
 ## Credits & Acknowledgements
 
